@@ -1,9 +1,15 @@
 import React from 'react'
+import { after, connection } from "next/server";
 import ExploreBtn from "@/app/component/ExploreBtn";
 import EventCard from "@/app/component/EventCard";
 import {events} from "@/lib/constant";
+import { flushPostHogLogs, logFeaturedEventsRendered } from "@/lib/posthog-logger";
 
-const Page = () => {
+const Page = async () => {
+    await connection();
+    logFeaturedEventsRendered(events.length);
+    after(flushPostHogLogs);
+
     return (
 
         <section>
